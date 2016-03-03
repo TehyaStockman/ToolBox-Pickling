@@ -2,9 +2,10 @@
 
 from os.path import exists
 import sys
+
 from pickle import dump, load
 
-def update_counter(file_name, reset=False):
+def update_counter(filename, reset=False):
 	""" Updates a counter stored in the file 'file_name'
 
 		A new counter will be created and initialized to 1 if none exists or if
@@ -29,7 +30,27 @@ def update_counter(file_name, reset=False):
 	>>> update_counter('blah2.txt')
 	2
 	"""
-	pass
+	if exists(filename) == True:
+		fp = open(filename, 'r')
+		
+		counter = load(fp) 
+		fp.close()
+
+		if reset ==True:
+			counter = 1
+		else:
+			counter += 1
+
+	else:
+		counter = 1
+
+	fp = open(filename, 'w')
+
+	dump(counter, fp)
+	fp.close()
+	return counter
+
+
 
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
@@ -37,3 +58,5 @@ if __name__ == '__main__':
 		doctest.testmod()
 	else:
 		print "new value is " + str(update_counter(sys.argv[1]))
+
+
